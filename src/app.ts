@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import authRoutes from "./routes/auth.routes";
 
 dotenv.config();
 
@@ -24,6 +25,8 @@ app.get('/health', (req, res) => {
     });
 });
 
+
+app.use('/auth', authRoutes);
 
 app.use((req, res)=> {
   res.status(404).json({ error: 'Route not found' });
