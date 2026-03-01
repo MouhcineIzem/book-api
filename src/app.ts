@@ -3,8 +3,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import swaggerUi from 'swagger-ui-express';
 import authRoutes from "./routes/auth.routes";
 import bookRoutes from "./routes/book.routes";
+import reviewRoutes from "./routes/review.routes";
+import { swaggerSpec} from "./doc/swagger";
+
 
 dotenv.config();
 
@@ -29,6 +33,15 @@ app.get('/health', (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/books', bookRoutes);
+app.use('/books/:bookId/reviews', reviewRoutes);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: 'Book API Docs',
+    swaggerOptions: {
+        persistAuthorization: true,
+    },
+}));
+
 
 app.use((req, res)=> {
   res.status(404).json({ error: 'Route not found' });
